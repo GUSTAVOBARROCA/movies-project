@@ -1,5 +1,7 @@
+import Button from "../../components/Button"
 import api from "../../services/api"
-import { Background } from "./styles"
+import { Background, Container, Info,ContainerButtons, Poster } from "./styles"
+
 import { useState, useEffect } from "react"
 
 function Home() {
@@ -24,8 +26,20 @@ function Home() {
         <>
         { movie && ( 
             <Background image={`//image.tmdb.org/t/p/original${movie.backdrop_path}`  }>
-                <h1>{movie.title}</h1>
-                <p>{movie.overview}</p>
+                <Container>
+                    <Info> 
+                        <h1>{movie.title}</h1>
+                        <p>{movie.overview}</p>
+                        <ContainerButtons>
+                        <Button red >Assista Agora</Button>
+                        <Button>Assista o Trailer</Button>
+                        </ContainerButtons>
+                    </Info>   
+                    <Poster>
+                        <img alt="capa-do-filme" src={`//image.tmdb.org/t/p/original${movie.poster_path}`} />
+                    </Poster>
+                </Container>
+                
             </Background>
         ) }    
         </>
