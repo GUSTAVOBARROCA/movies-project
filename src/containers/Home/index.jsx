@@ -1,23 +1,36 @@
+import { useState, useEffect } from "react"
 import Button from "../../components/Button"
+import Slider from "../../components/Slider"
 import api from "../../services/api"
+import { getImages } from "../../utils/getImages"
 import { Background, Container, Info,ContainerButtons, Poster } from "./styles"
 
-import { useState, useEffect } from "react"
+
 
 function Home() {
 
     const [ movie, setMovie ] = useState()
+    const [ topMovies, setTopMovies ] = useState()
 
     useEffect( () => {
         async function getMovies(){
             const { data:{ results } } = await api.get('/movie/popular')
     
-            setMovie(results[0])
+            setMovie(results[4])
         
         }
-        console.log(movie)
-        getMovies()
+        
 
+        async function getTopMovies(){
+            const { data:{ results } } = await api.get('/movie/top_rated')
+
+            console.log(results)
+            setTopMovies(results)
+
+        }
+
+            getMovies()
+            getTopMovies()
     }, [] )  
 
 
@@ -25,7 +38,7 @@ function Home() {
 
         <>
         { movie && ( 
-            <Background image={`//image.tmdb.org/t/p/original${movie.backdrop_path}`  }>
+            <Background image={getImages(movie.backdrop_path)}>
                 <Container>
                     <Info> 
                         <h1>{movie.title}</h1>
@@ -36,12 +49,15 @@ function Home() {
                         </ContainerButtons>
                     </Info>   
                     <Poster>
-                        <img alt="capa-do-filme" src={`//image.tmdb.org/t/p/original${movie.poster_path}`} />
+                        <img alt="capa-do-filme" src={getImages(movie.poster_path)} />
                     </Poster>
                 </Container>
-                
-            </Background>
+            </Background> 
         ) }    
+
+        { topMovies && <Slider info={ topMovies } title={'Top Filmes'} /> }
+                
+            
         </>
     )
 
